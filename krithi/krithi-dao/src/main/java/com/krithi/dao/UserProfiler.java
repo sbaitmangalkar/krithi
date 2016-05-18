@@ -20,4 +20,5 @@ public interface UserProfiler {
 	public abstract boolean verifyUserExistence(String userName);
 	public abstract void saveUserStatus(User user);
 	public abstract User fetchUser(String userName);
+	public abstract void removeUserDetails(User user, List<String>webSiteNames);
 }

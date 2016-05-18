@@ -1,5 +1,6 @@
 package com.krithi.app;
 
+import java.awt.Component;
 import java.awt.Dimension;
 import java.awt.FlowLayout;
 import java.awt.Font;
@@ -17,9 +18,12 @@ import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.Set;
 
+import javax.swing.Box;
 import javax.swing.ImageIcon;
 import javax.swing.JButton;
+import javax.swing.JCheckBox;
 import javax.swing.JFrame;
 import javax.swing.JLabel;
 import javax.swing.JPanel;
@@ -48,6 +52,7 @@ public class AppBuilder {
 	private JPanel appPanel;
 	private Dimension screenDim;
 	private ImageIcon frameImg;
+	private int appRefreshCount;
 	
 	/**
 	 * Returns the app info message.
@@ -72,8 +77,12 @@ public class AppBuilder {
 	 * @since v1.0
 	 */
 	private void init() {
+		appRefreshCount = 0;
 		screenDim = Toolkit.getDefaultToolkit().getScreenSize();
-		frameImg = new ImageIcon("src/main/resources/images/K_icon.jpg");
+		//URL url = AppBuilder.class.getResource("/images/K_icon.jpg");
+		
+		frameImg = new ImageIcon("/images/K_icon.jpg");
+		//frameImg = new ImageIcon(url);
 		String systemUser = System.getProperty("user.name");
 		String appFolderPathStr = UserSystemProperties.getAppFolderPath();
 		Path appFolderPath = Paths.get(appFolderPathStr);
@@ -277,7 +286,104 @@ public class AppBuilder {
 						JPanel addPanel = new JPanel(new FlowLayout());
 						JButton addButton = new JButton("Add Details");
 						JButton editDetails = new JButton("Edit Details");
+						JButton deleteDetails = new JButton("Delete Details");
 						JButton refresh = new JButton("Refresh");
+						
+						/*
+						 * START: Adding ActionListener for Delete Details Button.
+						 */
+						deleteDetails.addActionListener(new ActionListener() {
+							
+							@Override
+							public void actionPerformed(ActionEvent e) {
+								appFrame.setEnabled(false);
+								JFrame deleteDetailsFrame = new JFrame("K.R.I.T.H.I v1.0");
+								JPanel deleteDetailsPanel = new JPanel(new FlowLayout());
+								
+								JPanel deleteDetailsTitlePanel = new JPanel(new FlowLayout());
+								JLabel deleteDetailsLabel = new JLabel("Select a Website To Delete The Details");
+								deleteDetailsLabel.setFont(new Font("Times New Roman", 1, 13));
+								deleteDetailsTitlePanel.add(deleteDetailsLabel);
+								
+								JPanel optionsPanel = new JPanel(new FlowLayout());
+								Box verticalBox = Box.createVerticalBox();
+							
+								List<Map<String, String>> allUserPasswords = specificUser.getListOfUserPasswords();
+								for(Map<String, String> eachUserPassword : allUserPasswords){
+									Set<String> allWebNames = eachUserPassword.keySet();
+									for(String eachWebName : allWebNames){
+										JCheckBox webOptionCheck = new JCheckBox(eachWebName);
+										verticalBox.add(webOptionCheck);
+									}
+								}
+								
+								JPanel deletionButtonsPanel = new JPanel(new FlowLayout());
+								JButton deleteButton = new JButton("Delete");
+								JButton closeButton = new JButton("Close");
+								deletionButtonsPanel.add(deleteButton);
+								deletionButtonsPanel.add(closeButton);
+								
+								/*
+								 * START: Adding ActionListener for Delete Button.
+								 */
+								deleteButton.addActionListener(new ActionListener() {
+									
+									@Override
+									public void actionPerformed(ActionEvent e) {
+										Component[] availableOptionsForDeletion = verticalBox.getComponents();
+										List<String> websiteNames = new ArrayList<>();
+										for(Component eachComponent : availableOptionsForDeletion){
+											JCheckBox eachOption = (JCheckBox)eachComponent;
+											if(eachOption.isSelected()){
+												String optionName = eachOption.getText();
+												websiteNames.add(optionName);
+												System.out.println("Adding " + optionName + "...");
+											}
+										}
+										
+										service.deleteSpecificUserDetails(specificUser, websiteNames);
+										appFrame.setEnabled(true);
+										deleteDetailsFrame.dispose();
+										
+									}
+								});
+								/*
+								 * END: Adding ActionListener for Delete Button.
+								 */
+								
+								/*
+								 * START: Adding ActionListener for Close Button.
+								 */
+								closeButton.addActionListener(new ActionListener() {
+									
+									@Override
+									public void actionPerformed(ActionEvent e) {
+										appFrame.setEnabled(true);
+										deleteDetailsFrame.dispose();
+										
+									}
+								});
+								/*
+								 * END: Adding ActionListener for Close Button.
+								 */
+								
+								optionsPanel.add(verticalBox);
+								deleteDetailsPanel.add(deleteDetailsTitlePanel);
+								deleteDetailsPanel.add(optionsPanel);
+								deleteDetailsPanel.add(deletionButtonsPanel);
+								deleteDetailsFrame.getContentPane().add(deleteDetailsPanel);
+								deleteDetailsFrame.setVisible(true);
+								deleteDetailsFrame.setSize(250, 340);
+								deleteDetailsFrame.setDefaultCloseOperation(JFrame.DO_NOTHING_ON_CLOSE);
+								//deleteDetailsFrame.setResizable(false);
+								deleteDetailsFrame.setLocation(screenDim.width / 2 - deleteDetailsFrame.getSize().width / 2, screenDim.height/2 - deleteDetailsFrame.getSize().height / 2);
+								deleteDetailsFrame.setIconImage(frameImg.getImage());
+								
+							}
+						});
+						/*
+						 * END: Adding ActionListener for Delete Details Button.
+						 */
 						
 						/*
 						 * START: Adding ActionListener for Edit Details button.
@@ -301,6 +407,8 @@ public class AppBuilder {
 							
 							@Override
 							public void actionPerformed(ActionEvent e) {
+								appRefreshCount++;
+								System.out.println("App refreshed " + appRefreshCount + " time(s)");
 								appPanel.removeAll();
 								JPanel treePanel = new JPanel(new FlowLayout());
 								String displayName = userNameStr.toUpperCase();
@@ -337,6 +445,10 @@ public class AppBuilder {
 								appPanel.add(treeScrollPane);
 								appPanel.add(addPanel);
 								appFrame.setSize(502, 340);
+								if(appRefreshCount > 1){
+									int widthSize = 502 + appRefreshCount;
+									appFrame.setSize(widthSize, 340);
+								}
 							}
 						});
 						/*
@@ -432,6 +544,7 @@ public class AppBuilder {
 						 */
 						addPanel.add(addButton);
 						addPanel.add(editDetails);
+						addPanel.add(deleteDetails);
 						addPanel.add(refresh);
 						appPanel.add(appNamePanel);
 						appPanel.add(treeScrollPane);

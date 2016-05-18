@@ -8,6 +8,8 @@ import java.io.ObjectInputStream;
 import java.io.ObjectOutputStream;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Map;
+import java.util.Set;
 
 import com.krithi.model.User;
 import com.krithi.model.UserSystemProperties;
@@ -181,6 +183,35 @@ public class UserProfilerImpl implements UserProfiler {
 			}
 		}
 		return requiredUser;
+	}
+
+	/**
+	 * Removes the specified user details form
+	 * the system.
+	 * 
+	 * @param <code>User user</code>
+	 * @param <String websiteName</code>
+	 */
+	@Override
+	public void removeUserDetails(User user, List<String> websiteNames) {
+		List<User> allUsers = getAllUsers();
+		if(allUsers.contains(user)){
+			List<Map<String, String>>allPasswordDetails = user.getListOfUserPasswords();
+			for(String eachWebsite : websiteNames){
+			for(int i = 0; i < allPasswordDetails.size(); i++){
+				Map<String, String> eachPasswordDetail = allPasswordDetails.get(i);
+					if(eachPasswordDetail.containsKey(eachWebsite)){
+						allPasswordDetails.remove(i);
+						break;
+					}
+				}
+			}
+			user.setListOfUserPasswords(allPasswordDetails);
+			saveUserStatus(user);
+			
+		}else{
+			System.out.println("## User does not exists ##");
+		}
 	}
 
 }

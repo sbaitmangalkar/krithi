@@ -101,4 +101,19 @@ public class UserServiceProviderImpl implements UserServiceProvider{
 		return userProfile.fetchUser(userName);
 	}
 
+	/**
+	 * Calls a DAO layer method to delete the specified details
+	 * of a specified user.
+	 * 
+	 * @param <code>User user</code>
+	 * @param <code>List<String> websiteNames</code>
+	 * @since v1.0
+	 */
+	@Override
+	public void deleteSpecificUserDetails(User user, List<String>websiteNames) {
+		UserProfiler userProfile = new UserProfilerImpl();
+		userProfile.removeUserDetails(user, websiteNames);
+		
+	}
+
 }

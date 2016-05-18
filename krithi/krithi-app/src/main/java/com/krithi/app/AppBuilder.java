@@ -79,10 +79,17 @@ public class AppBuilder {
 	private void init() {
 		appRefreshCount = 0;
 		screenDim = Toolkit.getDefaultToolkit().getScreenSize();
-		//URL url = AppBuilder.class.getResource("/images/K_icon.jpg");
-		
-		frameImg = new ImageIcon("/images/K_icon.jpg");
-		//frameImg = new ImageIcon(url);
+		/*
+		 * To be used while running locally in IDE.
+		 * comment this below line while extracting
+		 * the executable jar.
+		 */
+		frameImg = new ImageIcon("src/main/resources/images/K_icon.jpg");
+		/*
+		 * To be used when extracting the executable jar.
+		 * Uncomment the below statement.
+		 */
+		//frameImg = new ImageIcon(getClass().getResource("/resources/images/K_icon.jpg"));
 		String systemUser = System.getProperty("user.name");
 		String appFolderPathStr = UserSystemProperties.getAppFolderPath();
 		Path appFolderPath = Paths.get(appFolderPathStr);

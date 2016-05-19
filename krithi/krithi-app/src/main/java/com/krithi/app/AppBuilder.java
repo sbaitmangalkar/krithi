@@ -82,7 +82,7 @@ public class AppBuilder {
 		appRefreshCount = 0;
 		screenDim = Toolkit.getDefaultToolkit().getScreenSize();
 		/*
-		 * To be used while running locally in IDE. comment this below line
+		 * To be used while running locally in IDE. Comment this below line
 		 * while extracting the executable jar.
 		 */
 		frameImg = new ImageIcon("src/main/resources/images/K_icon.jpg");

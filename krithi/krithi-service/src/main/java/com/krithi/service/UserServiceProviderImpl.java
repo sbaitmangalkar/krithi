@@ -116,6 +116,15 @@ public class UserServiceProviderImpl implements UserServiceProvider{
 		
 	}
 
+	/**
+	 * Calls a DAO layer method to update the given user
+	 * details.
+	 * 
+	 * @param <code>User user</code>
+	 * @param <code>String webSiteName</code>
+	 * @param <code>String newPassword</code>
+	 * @since v1.0
+	 */
 	@Override
 	public void editSpecificUserDetails(User user, String webSiteName, String newPassword) {
 		UserProfiler userProfile = new UserProfilerImpl();

@@ -60,7 +60,24 @@ public class UserProfilerImpl implements UserProfiler {
 	 */
 	@Override
 	public void editUserDetails(User user, String websiteName, String password) {
-		// TODO Yet to add this functionality.
+		List<User> allUsers = getAllUsers();
+		if(allUsers.contains(user)){
+			List<Map<String, String>>allPasswordDetails = user.getListOfUserPasswords();
+			for(Map<String, String> eachPasswordDetail : allPasswordDetails){
+				Set<String> allWebEntries = eachPasswordDetail.keySet();
+				if(allWebEntries.contains(websiteName)){
+					String oldUserIdPasswordCombo = eachPasswordDetail.get(websiteName);
+					String[] userPass = oldUserIdPasswordCombo.split("\\|");
+					userPass[1] = password;
+					String newUserPassCombo = userPass[0] + "|" + password;
+					eachPasswordDetail.replace(websiteName, newUserPassCombo);
+					break;
+				}
+			}
+			saveUserStatus(user);
+		}else{
+			System.out.println("$$ User not in system!! $$");
+		}
 	}
 
 	/**

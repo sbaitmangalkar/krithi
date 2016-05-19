@@ -116,4 +116,11 @@ public class UserServiceProviderImpl implements UserServiceProvider{
 		
 	}
 
+	@Override
+	public void editSpecificUserDetails(User user, String webSiteName, String newPassword) {
+		UserProfiler userProfile = new UserProfilerImpl();
+		userProfile.editUserDetails(user, webSiteName, newPassword);
+		
+	}
+
 }

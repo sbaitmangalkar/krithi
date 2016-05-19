@@ -20,4 +20,5 @@ public interface UserServiceProvider {
 	public abstract void createAppEnvironment();
 	public abstract User getSpecificUser(String userName);
 	public abstract void deleteSpecificUserDetails(User user, List<String> websiteNames);
+	public abstract void editSpecificUserDetails(User user, String webSiteName, String newPassword);
 }

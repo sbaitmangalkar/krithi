@@ -4,6 +4,7 @@ import java.awt.Component;
 import java.awt.Dimension;
 import java.awt.FlowLayout;
 import java.awt.Font;
+import java.awt.GridBagLayout;
 import java.awt.Toolkit;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
@@ -21,9 +22,11 @@ import java.util.Map;
 import java.util.Set;
 
 import javax.swing.Box;
+import javax.swing.DefaultComboBoxModel;
 import javax.swing.ImageIcon;
 import javax.swing.JButton;
 import javax.swing.JCheckBox;
+import javax.swing.JComboBox;
 import javax.swing.JFrame;
 import javax.swing.JLabel;
 import javax.swing.JPanel;
@@ -386,7 +389,7 @@ public class AppBuilder {
 								deleteDetailsFrame.setVisible(true);
 								deleteDetailsFrame.setSize(250, 340);
 								deleteDetailsFrame.setDefaultCloseOperation(JFrame.DO_NOTHING_ON_CLOSE);
-								// deleteDetailsFrame.setResizable(false);
+								deleteDetailsFrame.setResizable(false);
 								deleteDetailsFrame.setLocation(
 										screenDim.width / 2 - deleteDetailsFrame.getSize().width / 2,
 										screenDim.height / 2 - deleteDetailsFrame.getSize().height / 2);
@@ -405,7 +408,90 @@ public class AppBuilder {
 
 							@Override
 							public void actionPerformed(ActionEvent e) {
-
+								appFrame.setEnabled(false);
+								JFrame editDetailsFrame = new JFrame("K.R.I.T.H.I v1.0");
+								JPanel editDetailsPanel = new JPanel();
+								JLabel editDetailsLabel = new JLabel("Edit Details", JLabel.CENTER);
+								editDetailsLabel.setFont(new Font("Times New Roman", 1, 14));
+								
+								DefaultComboBoxModel<String> websiteNamesModel = new DefaultComboBoxModel<>();
+								List<Map<String, String>> allUserPasswords = specificUser.getListOfUserPasswords();
+								for(Map<String, String> eachUserPasswordDetail : allUserPasswords){
+									Set<String> allWebsitesOfEachUser = eachUserPasswordDetail.keySet();
+									for(String eachWebsite : allWebsitesOfEachUser){
+										websiteNamesModel.addElement(eachWebsite);
+									}
+								}
+								
+								JLabel comboLabel = new JLabel("Select a Website To Edit Your Password: ");
+								comboLabel.setFont(new Font("Times New Roman", 1, 12));
+								JComboBox<String> allWebOptionsOfUser = new JComboBox<>(websiteNamesModel);
+								JPanel comboPanel = new JPanel(new FlowLayout());
+								comboPanel.add(comboLabel);
+								comboPanel.add(allWebOptionsOfUser);
+								
+								JPanel editPasswordPanel = new JPanel(new FlowLayout());
+								JLabel editPassLabel = new JLabel("Enter your new password: ");
+								editPassLabel.setFont(new Font("Times New Roman", 1, 12));
+								JPasswordField editPass = new JPasswordField(20);
+								editPasswordPanel.add(editPassLabel);
+								editPasswordPanel.add(editPass);
+								
+								JPanel buttonPanel = new JPanel(new FlowLayout());
+								JButton saveButton = new JButton("Save");
+								JButton closeButton = new JButton("Close");
+								buttonPanel.add(saveButton);
+								buttonPanel.add(closeButton);
+								
+								/*
+								 * START: Adding ActionListener for Close Button.
+								 */
+								closeButton.addActionListener(new ActionListener() {
+									
+									@Override
+									public void actionPerformed(ActionEvent e) {
+										appFrame.setEnabled(true);
+										editDetailsFrame.dispose();
+										
+									}
+								});
+								/*
+								 * END: Adding ActionListener for Close Button.
+								 */
+								
+								/*
+								 * START: Adding ActionListener for Save Button.
+								 */
+								saveButton.addActionListener(new ActionListener() {
+									
+									@Override
+									public void actionPerformed(ActionEvent e) {
+										String selectedWebsite = (String)allWebOptionsOfUser.getSelectedItem();
+										System.out.println(selectedWebsite + " is selected...");
+										String newPassword = new String(editPass.getPassword());
+										System.out.println("New password is " + newPassword);
+										service.editSpecificUserDetails(specificUser, selectedWebsite, newPassword);
+										appFrame.setEnabled(true);
+										editDetailsFrame.dispose();
+										
+									}
+								});
+								/*
+								 * END: Adding ActionListener for Save Button.
+								 */
+								editDetailsPanel.add(editDetailsLabel);
+								editDetailsPanel.add(comboPanel);
+								editDetailsPanel.add(editPasswordPanel);
+								editDetailsPanel.add(buttonPanel);
+								editDetailsFrame.getContentPane().add(editDetailsPanel);
+								editDetailsFrame.setVisible(true);
+								editDetailsFrame.setSize(390, 240);
+								editDetailsFrame.setDefaultCloseOperation(JFrame.DO_NOTHING_ON_CLOSE);
+								editDetailsFrame.setResizable(false);
+								editDetailsFrame.setLocation(
+										screenDim.width / 2 - editDetailsFrame.getSize().width / 2,
+										screenDim.height / 2 - editDetailsFrame.getSize().height / 2);
+								editDetailsFrame.setIconImage(frameImg.getImage());
 							}
 						});
 						/*

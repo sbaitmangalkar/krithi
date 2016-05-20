@@ -4,7 +4,6 @@ import java.awt.Component;
 import java.awt.Dimension;
 import java.awt.FlowLayout;
 import java.awt.Font;
-import java.awt.GridBagLayout;
 import java.awt.Toolkit;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
@@ -653,6 +652,40 @@ public class AppBuilder {
 						appPanel.add(addPanel);
 						appFrame.setSize(500, 340);
 					} else {
+
+						appFrame.setEnabled(false);
+						JFrame popup = new JFrame("K.R.I.T.H.I v1.0");
+						JPanel popupPanel = new JPanel(new FlowLayout());
+						JPanel msgPanel = new JPanel(new FlowLayout());
+						JLabel msgLabel = new JLabel("Incorrect User name or Password!!");
+						msgLabel.setFont(new Font("Times New Roman", 1, 14));
+						msgPanel.add(msgLabel);
+
+						JPanel buttonPanel = new JPanel(new FlowLayout());
+						JButton okButton = new JButton("Ok");
+						buttonPanel.add(okButton);
+
+						okButton.addActionListener(new ActionListener() {
+
+							@Override
+							public void actionPerformed(ActionEvent e) {
+								appFrame.setEnabled(true);
+								popup.dispose();
+
+							}
+						});
+
+						popupPanel.add(msgPanel);
+						popupPanel.add(buttonPanel);
+						popup.getContentPane().add(popupPanel);
+						popup.setVisible(true);
+						popup.setSize(280, 140);
+						popup.setResizable(false);
+						popup.setDefaultCloseOperation(JFrame.DO_NOTHING_ON_CLOSE);
+						popup.setLocation(screenDim.width / 2 - popup.getSize().width / 2,
+								screenDim.height / 2 - popup.getSize().height / 2);
+						popup.setIconImage(frameImg.getImage());
+						
 						System.out.println("@@@ Incorrect Password!! Please enter correct password!! @@@");
 					}
 

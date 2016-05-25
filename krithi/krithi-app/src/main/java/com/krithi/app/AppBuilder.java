@@ -54,6 +54,8 @@ public class AppBuilder {
 	private Dimension screenDim;
 	private ImageIcon frameImg;
 	private int appRefreshCount;
+	
+	public static final String ABOUT_APP_FILE_NAME = "about-krithi.txt";
 
 	/**
 	 * Returns the app info message.
@@ -103,7 +105,7 @@ public class AppBuilder {
 				// Files.setAttribute(appFilePath, "dos:hidden", Boolean.TRUE,
 				// LinkOption.NOFOLLOW_LINKS);
 
-				Path aboutAppFileResolvedPath = appDirPath.resolve("about-krithi.txt");
+				Path aboutAppFileResolvedPath = appDirPath.resolve(ABOUT_APP_FILE_NAME);
 				Path aboutFilePath = Files.createFile(aboutAppFileResolvedPath);
 				String about = aboutMessage();
 				byte[] aboutInBytes = about.getBytes();

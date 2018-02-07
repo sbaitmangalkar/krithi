@@ -340,7 +340,7 @@ public class AppBuilder {
 								 * START: Adding ActionListener for Delete
 								 * Button.
 								 */
-								deleteButton.addActionListener(new ActionListener() {
+								/*deleteButton.addActionListener(new ActionListener() {
 
 									@Override
 									public void actionPerformed(ActionEvent e) {
@@ -360,6 +360,22 @@ public class AppBuilder {
 										deleteDetailsFrame.dispose();
 
 									}
+								});*/
+								deleteButton.addActionListener(d -> {
+									Component[] availableOptionsForDeletion = verticalBox.getComponents();
+									List<String> websiteNames = new ArrayList<>();
+									for (Component eachComponent : availableOptionsForDeletion) {
+										JCheckBox eachOption = (JCheckBox) eachComponent;
+										if (eachOption.isSelected()) {
+											String optionName = eachOption.getText();
+											websiteNames.add(optionName);
+											System.out.println("Adding " + optionName + "...");
+										}
+									}
+
+									service.deleteSpecificUserDetails(specificUser, websiteNames);
+									appFrame.setEnabled(true);
+									deleteDetailsFrame.dispose();
 								});
 								/*
 								 * END: Adding ActionListener for Delete Button.

@@ -271,7 +271,7 @@ public class AppUninstaller{
 	
 
 	/**
-	 * Applicaion launcher.
+	 * Application launcher.
 	 * 
 	 * @param args
 	 * @since v1.0
